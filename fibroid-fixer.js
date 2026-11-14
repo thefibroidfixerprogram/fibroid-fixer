@@ -181,7 +181,7 @@ class FibroidFixerPage extends HTMLElement {
     const rawSessions = (this.getAttribute('class-sessions') || '').split(',').map(x => x.trim()).filter(Boolean);
     try {
       const fmt = new Intl.DateTimeFormat(undefined, {weekday: 'short', hour: 'numeric', minute: '2-digit', timeZoneName: 'short'});
-      const parts = rawSessions.map(v => new Date(v)).filter(d => !isNaN(d)).map(d => fmt.format(d));
+      const parts = rawSessions.map(v => /^\d{9,11}$/.test(v) ? new Date(Number(v) * 1000) : new Date(v)).filter(d => !isNaN(d)).map(d => fmt.format(d));
       content.classes[0].localTimes = parts.length ? parts.join(' \u00b7 ') : null;
     } catch (_) { content.classes[0].localTimes = null; }
     mountApprovedSite(root, content, this, listen);
